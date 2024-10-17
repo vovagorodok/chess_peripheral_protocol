@@ -61,8 +61,7 @@ Central always starts round by sending `fen`. Peripheral send `ok` if has the sa
 c) fen rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
 p) ok
 ```
-Peripheral send `nok` if has different state.
-Than central or peripheral can send `fen` until both state become the same.
+Peripheral send `nok` if has different state, then central or peripheral can send `fen` until both state become the same.
 ```
 c) fen rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
 p) nok
@@ -135,14 +134,16 @@ p) ok
 
 Sending `variant` means switch to them if supported.
 Central should sent `variant` command bifore `fen`.
-If `variant` is not sent than `standard` should be used.
+If `variant` is not sent then 
+standard` should be used.
 ```
 c) variant standard
 p) ok
 c) fen rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
 p) ok
 ```
-Peripheral can not support variant. Than central should not send `fen`.
+
+If peripheral doesn't support variant then central shouldn't send `fen`.
 ```
 c) variant chess_960
 p) nok
@@ -162,6 +163,7 @@ crazy_house
 ```
 
 ### Chess 960
+Known also as fischer random.  
 Same as `standard`, but castling is indicated as king and rook starting positions.
 ```
 c) move e1h1
@@ -184,7 +186,7 @@ Feature name is `msg`.
 c) feature msg
 p) ok
 ```
-Show message in other side.
+Provides `msg` command to show message in other side.
 ```
 c) msg Hello peripheral
 p) ok
