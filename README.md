@@ -25,13 +25,14 @@ rx characteristic: f535147e-b2c9-11ec-a0c2-8bbd706ec4e6
 ````
 
 ## Assumptions
-Message direction:  
-`c)` - central send  
-`p)` - peripheral send  
-`cp)` - central or peripheral send
-
 All commands should be written in lower case where words are splitted by the `_` sign.  
 Round rules should be always controlled by central.
+
+Designation of device that sends command:  
+`c)` - central  
+`p)` - peripheral  
+`cp)` - central or peripheral  
+It should not be visible in real communication.
 
 ## Basic functionality
 Required commands:  
@@ -166,7 +167,7 @@ crazy_house
 ```
 
 ### Chess 960
-Same as `standard`, but castling indicates as king and rook starting positions.
+Same as `standard`, but castling is indicated as king and rook starting positions.
 ```
 c) move e1h1
 ```
