@@ -127,9 +127,9 @@ Cenral can check all supported variants.
 ```
 c) variant standard
 p) ok
-c) variant chess960
+c) variant chess_960
 p) nok
-c) variant 3check
+c) variant 3_check
 p) ok
 ```
 
@@ -139,12 +139,12 @@ If `variant` is not sent than `standard` should be used.
 ```
 c) variant standard
 p) ok
-c) frn rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
+c) fen rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
 p) ok
 ```
 Peripheral can not support variant. Than central should not send `fen`.
 ```
-c) variant chess960
+c) variant chess_960
 p) nok
 ```
 
@@ -203,7 +203,7 @@ p) ok
 Provides `last_move` command that should be send only after `fen`.  
 When round doesn't have last move, command shouldn't be sent.
 ```
-c) frn rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR w
+c) fen rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR w
 p) ok
 c) last_move a2a3
 p) ok
