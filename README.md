@@ -35,15 +35,20 @@ Designation of device that sends command:
 It should not be visible in real communication.
 
 ## Basic functionality
-Required commands:  
-`cp) ok/nok` - command response  
-`cp) fen [fen]` - round state  
-`cp) move [uci]` - piece move  
-`c) promote [uci]` - piece promotion
+Required commands:
+```
+cp) ok
+cp) nok 
+cp) fen [fen]
+cp) move [uci]
+c) promote [uci]
+```
 
-Functionality can be extended by commands:  
-`c) variant [variant]` - round variant  
-`c) feature [feature]` - feature request
+Functionality can be extended by commands:
+```
+c) variant [variant]
+c) feature [feature]
+```
 
 Example:
 ```
@@ -56,7 +61,10 @@ c) ok
 ```
 
 ## Fen
-Central always starts round by sending `fen`. Peripheral send `ok` if has the same state.
+Command name is `fen`.  
+Rapresents round state.
+Central always starts round by sending `fen`.
+Peripheral send `ok` if has the same state.
 ```
 c) fen rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
 p) ok
@@ -86,7 +94,8 @@ c) nok
 ```
 
 ## Move
-Central and peripheral send moves only when states math.
+Command name is `move`.  
+Central and peripheral can send moves only when states are same.
 ```
 c) move a2a3
 p) ok
@@ -108,6 +117,7 @@ c) move a5b6
 ```
 
 ## Promote
+Command name is `promote`.  
 Central and peripheral send moves with promotion.
 ```
 p) move a7a8q
@@ -122,6 +132,8 @@ p) ok
 ```
 
 ## Variant
+Command name is `variant`.  
+Represents round variant.
 Cenral can check all supported variants.
 ```
 c) variant standard
@@ -132,10 +144,9 @@ c) variant 3_check
 p) ok
 ```
 
-Sending `variant` means switch to them if supported.
-Central should sent `variant` command bifore `fen`.
-If `variant` is not sent then 
-standard` should be used.
+Sending `variant` means switch to them if supported.  
+Central should sent `variant` only bifore `fen`.  
+If `variant` has not been sent then `standard` should be used.
 ```
 c) variant standard
 p) ok
@@ -143,13 +154,13 @@ c) fen rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
 p) ok
 ```
 
-If peripheral doesn't support variant then central shouldn't send `fen`.
+If peripheral doesn't support variant then central shouldn't send `fen` for them.
 ```
 c) variant chess_960
 p) nok
 ```
 
-List of predefined variants names.
+List of predefined variants names:
 ```
 standard
 chess_960
@@ -170,7 +181,9 @@ c) move e1h1
 ```
 
 ## Feature
-Cenral can check all supported features.
+Command name is `feature`.  
+Cenral can check all features that are supported by peripheral.  
+If central didn't ask for feature, then it should be disabled on both sides.
 ```
 c) feature last_move
 p) ok
@@ -184,9 +197,14 @@ p) ok
 Feature name is `msg`.
 ```
 c) feature msg
-p) ok
 ```
-Provides `msg` command to show message in other side.
+
+Provides command:
+```
+cp) msg [message]
+```
+
+Used to show message in anther side.
 ```
 c) msg Hello peripheral
 p) ok
@@ -200,10 +218,15 @@ c) ok
 Feature name is `last_move`.
 ```
 c) feature last_move
-p) ok
 ```
-Provides `last_move` command that should be send only after `fen`.  
-When round doesn't have last move, command shouldn't be sent.
+
+Provides command:
+```
+c) last_move [uci]
+```
+
+Can be send only after central `fen`.  
+When round doesn't have last move, then command can not be sent.
 ```
 c) fen rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR w
 p) ok
@@ -215,7 +238,6 @@ p) ok
 Feature name is `option`.
 ```
 c) feature option
-p) ok
 ```
 ```
 c) options_begin
