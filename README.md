@@ -244,16 +244,16 @@ c) feature option
 ```
 c) options_begin
 p) ok
-p) option leds_brightness 4 range 1 4 1
+p) option brightness 4 range 1 4 1
 c)
 ...
 p) options_end
 c) ok
 ...
-c) option leds_brightness 3 # set option
+c) option brightness 3 # set option
 p) ok
 ...
-p) option leds_brightness 2 # inform device option changed
+p) option brightness 2 # inform device option changed
 c) ok
 ```
 
