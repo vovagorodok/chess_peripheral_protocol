@@ -172,8 +172,10 @@ horde
 racing_kings
 crazy_house
 ```
+If specific variant doesn't have chapter it means that it use exactly the same commands as `standard`.
 
 ### Chess 960
+Variant name is `chess_960`.  
 Known also as fischer random.  
 Same as `standard`, but castling is indicated as king and rook starting positions.
 ```
