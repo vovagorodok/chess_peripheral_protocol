@@ -61,29 +61,25 @@ Central always starts round by sending `fen`. Peripheral send `ok` if has the sa
 c) fen rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
 p) ok
 ```
-Peripheral send `nok` if has different state. Than central or peripheral send `fen` until both state become the same.
+Peripheral send `nok` if has different state.
+Than central or peripheral can send `fen` until both state become the same.
 ```
 c) fen rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
 p) nok
-...
 p) fen rnbqkbnr/pppppppp/8/8/8/7P/1PPPPPPP/RNBQKBNR
 c) nok
-...
 p) fen rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
 c) ok
 ```
 Peripheral can send even `w` (white), `b` (black), `?` (unknown) instead of full piece information depending on internal sensors and knovelage.  
 ```
-...
 p) fen ????????/????????/8/8/8/8/????????/????????
-c) nok
-...
+```
+```
 p) fen bbbbbbbb/bbbbbbbb/8/8/8/8/wwwwwwww/wwwwwwww w
-c) ok
 ```
 During the round, peripheral can detect and indicate boards mismatch (cat disaster case) by sending `fen`. As example cat knocked down all white pieces.
 ```
-...
 c) move a2a3
 p) ok
 p) fen ????????/????????/8/8/8/8/8/8
@@ -100,7 +96,6 @@ c) ok
 ```
 Only central can reject moves.
 ```
-...
 p) move a7a4
 c) nok
 ```
@@ -193,7 +188,8 @@ Show message in other side.
 ```
 c) msg Hello peripheral
 p) ok
-...
+```
+```
 p) msg Hello central
 c) ok
 ```
