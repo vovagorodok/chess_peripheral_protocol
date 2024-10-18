@@ -1,5 +1,5 @@
 # Chess Peripheral Protocol
-This protocol opens posibility to connect and play chess with peripheral devices like electronic boards, clocks and others in a common way.
+String based protocol that opens posibility to connect and play chess with peripheral devices like electronic boards, clocks and others in a common way.
 
 ## Table of contents
 - [Bluetooth LE implementation](#bluetooth-le-implementation)
@@ -13,7 +13,15 @@ This protocol opens posibility to connect and play chess with peripheral devices
 - [Feature](#feature)
   - [Message](#message)
   - [Last move](#last-move)
+  - [Round](#round)
+  - [Score](#score)
+  - [Time](#time)
+  - [Side](#side)
+  - [History](#history)
+  - [Prefen](#prefen)
   - [Option](#option)
+- [Contributors](#contributors)
+- [Links](#links)
 
 ## Bluetooth LE implementation
 Each peripheral should advertise on service with two string characteristics that simulate serial interface.  
@@ -236,27 +244,218 @@ c) last_move a2a3
 p) ok
 ```
 
+### Round
+Feature name is `round`.
+```
+c) feature round
+```
+
+Provides commands:
+```
+cp) draw
+cp) resign
+c) check [king position]
+c) checkmate [king position]
+c) stalemate [king position]
+c) end
+```
+
+Central or peripheral can offer draw. If opposite side accept then round ends with draw result.
+```
+c) draw
+p) ok
+```
+
+If opposite side reject then round continues.
+```
+p) draw
+c) nok
+```
+
+Central or peripheral can indicate round resignation that can not be rejected.
+```
+p) resign
+c) ok
+```
+
+Central can indicate round check, checkmate and stalemate that can not be rejected.
+```
+c) check a3
+p) ok
+```
+
+Central can indicate round ending in case of other varints with other ending rules.
+```
+c) end
+p) ok
+```
+
+### Score
+Feature name is `score`.
+```
+c) feature score
+```
+
+Provides command:
+```
+c) score [white] [black]
+```
+
+Central can indicate score after round ending.
+```
+c) score 1.5 2.5
+p) ok
+```
+
+### Time
+Feature name is `time`.
+```
+c) feature time
+```
+
+Provides command:
+```
+c) time [white] [black]
+```
+
+Central can indicate remaining time of each side in miliseconds.
+```
+c) time 31444 12510
+p) ok
+```
+
+### Side
+Feature name is `side`.
+```
+c) feature side
+```
+
+Provides command:
+```
+c) side [color]
+```
+
+Central can indicate peripheral side where color can be `w` (white), `b` (black), `?` (both).
+```
+c) side w
+p) ok
+```
+
+### History
+Feature name is `history`.
+```
+c) feature history
+```
+
+Provides commands:
+```
+cp) undo [number]
+cp) rendo [number]
+```
+
+Central or peripheral can offer move round state. If opposite side accept then round state changes.
+```
+c) undo 2
+p) ok
+```
+
+If opposite side reject then round continues with the same sate.
+```
+p) rendo 1
+c) nok
+```
+
+### Prefen
+Feature name is `prefen`.
+```
+c) feature prefen
+```
+
+Provides commands:
+```
+cp) prefens_begin
+cp) prefens_end
+cp) prefen [fen]
+```
+
 ### Option
 Feature name is `option`.
 ```
 c) feature option
 ```
+
+Provides commands:
+```
+c) options_begin
+p) option_item [name] [type] [value] [type params]
+p) options_end
+cp) option [name] [value]
+```
+
+Central can read all options from peripheral.
 ```
 c) options_begin
 p) ok
-p) option brightness 4 range 1 4 1
-c)
-...
-p) options_end
+p) option_item brightness int 4 1 4 1
 c) ok
-...
-c) option brightness 3 # set option
-p) ok
-...
-p) option brightness 2 # inform device option changed
+p) option_item animation_speed int 2 1 8 1
+c) ok
+p) options_end
 c) ok
 ```
 
+Central or peripheral can change option.
+```
+c) option brightness 3
+p) ok
+```
+
+Option types and their params:
+```
+bool
+enum [values]
+string
+int [min] [max] [optional step]
+float [min] [max] [optional step]
+```
+
+Bool has only `true` and `false` values.
+```
+p) option_item option_name bool false
+```
+Enum contains predefined values.
+```
+p) option_item option_name enum value2 value1 value2 value3
+```
+String contains any text information.
+```
+p) option_item option_name string Hello world
+```
+Int step param is optional.
+```
+p) option_item option_name int 0 0 8
+```
+Float step param is optional.
+```
+p) option_item option_name float 0.2 -0.1 0.5
+```
+
+Predefined option names that can be reused:
+```
+brightness
+engine_level
+move_inactive_time
+move_speed
+animation_speed
+animation_type
+always_queen_promotion
+enable_smooth_animation
+enable_docks
+enable_beeps
+enable_shakes
+```
+
+## Contributors
 
 ## Links
 CECP:  
