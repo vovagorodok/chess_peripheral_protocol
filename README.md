@@ -1,5 +1,5 @@
 # Chess Peripheral Protocol
-String based protocol that opens posibility to connect and play chess with peripheral devices like electronic boards, clocks and others in a common way.
+String based protocol that opens posibility to connect and play chess with peripheral devices like electronic boards, clocks and other in a common way.
 
 ## Table of contents
 - [Bluetooth LE implementation](#bluetooth-le-implementation)
@@ -34,13 +34,13 @@ rx characteristic: f535147e-b2c9-11ec-a0c2-8bbd706ec4e6
 
 ## Assumptions
 All commands should be written in lower case where words are splitted by the `_` sign.  
-Round rules should be always controlled by central.
+Central always controls round rules.
 
 Designation of device that sends command:  
 `c)` - central  
 `p)` - peripheral  
 `cp)` - central or peripheral  
-It should not be visible in real communication.
+Real communication shouldn't contain it.
 
 ## Basic functionality
 Required commands:
@@ -236,7 +236,7 @@ c) last_move [uci]
 ```
 
 Can be send only after central `fen`.  
-When round doesn't have last move, then command can not be sent.
+When round doesn't have last move, then command shouldn't be sent.
 ```
 c) fen rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR w
 p) ok
@@ -272,13 +272,13 @@ p) draw
 c) nok
 ```
 
-Central or peripheral can indicate round resignation that can not be rejected.
+Central or peripheral can indicate round resignation that can't be rejected.
 ```
 p) resign
 c) ok
 ```
 
-Central can indicate round check, checkmate and stalemate that can not be rejected.
+Central can indicate round check, checkmate and stalemate that can't be rejected.
 ```
 c) check a3
 p) ok
@@ -349,19 +349,19 @@ c) feature history
 
 Provides commands:
 ```
-cp) undo [number]
-cp) rendo [number]
+cp) undo [uci]
+cp) rendo [uci]
 ```
 
 Central or peripheral can offer move round state. If opposite side accept then round state changes.
 ```
-c) undo 2
+c) undo a3a2
 p) ok
 ```
 
 If opposite side reject then round continues with the same sate.
 ```
-p) rendo 1
+p) rendo a2a3
 c) nok
 ```
 
@@ -376,6 +376,19 @@ Provides commands:
 cp) prefens_begin
 cp) prefens_end
 cp) prefen [fen]
+```
+Can be used to check opposite state.  
+For example central can check and begin round from peripheral state.  
+Central or peripheral can request `prefen` broadcasting each time when opposite state changes.
+```
+c) prefens_begin
+p) ok
+p) prefen rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR w
+c) ok
+p) prefen rnbqkbnr/pppppppp/8/8/P7/8/1PPPPPPP/RNBQKBNR w
+c) ok
+c) prefens_end
+p) ok
 ```
 
 ### Option
