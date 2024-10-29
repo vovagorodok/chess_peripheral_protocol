@@ -1,8 +1,9 @@
 # Chess Peripheral Protocol
-String based protocol that opens posibility to connect and play chess with peripheral devices like electronic boards, clocks and other in a common way.
+String-based protocol that opens the possibility to connect and play chess from an app (which we call 'central') with devices like electronic boards, clocks, and others (called 'peripherals') in a common way.
 
 ## Table of contents
-- [Bluetooth LE implementation](#bluetooth-le-implementation)
+- [Physical layer](#physical-layer)
+  - [Bluetooth LE implementation](#bluetooth-le-implementation)
 - [Assumptions](#assumptions)
 - [Basic functionality](#basic-functionality)
 - [Fen](#fen)
@@ -23,7 +24,10 @@ String based protocol that opens posibility to connect and play chess with perip
 - [Contributors](#contributors)
 - [Links](#links)
 
-## Bluetooth LE implementation
+## Physical Layer
+The protocol should be universal enough to allow implementations through different physical interfaces like RS-232, BLE, and more.
+
+### Bluetooth LE implementation
 Each peripheral should advertise on service with two string characteristics that simulate serial interface.  
 Following uuids are defined:
 ````
@@ -31,6 +35,9 @@ service: f5351050-b2c9-11ec-a0c0-b3bc53b08d33
 tx characteristic: f53513ca-b2c9-11ec-a0c1-639b8957db99
 rx characteristic: f535147e-b2c9-11ec-a0c2-8bbd706ec4e6
 ````
+
+You can use our arduino implementation as reference:
+https://github.com/vovagorodok/ArduinoBleChess
 
 ## Assumptions
 All commands should be written in lower case where words are splitted by the `_` sign.  
@@ -40,17 +47,17 @@ Designation of device that sends command:
 `c)` - central  
 `p)` - peripheral  
 `cp)` - central or peripheral  
-Real communication shouldn't contain it.
 
 ## Basic functionality
 Required commands:
 ```
 cp) ok
 cp) nok 
-cp) fen [fen]
-cp) move [uci]
-c) promote [uci]
+cp) fen <fen>
+cp) move <uci>
+c) promote <uci>
 ```
+`ok` and `nok` commands are used for acknowelage, which must be answer for resto of command besiede `promote`
 
 Functionality can be extended by commands:
 ```
