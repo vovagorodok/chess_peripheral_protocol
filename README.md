@@ -61,8 +61,8 @@ c) promote <uci>
 
 Functionality can be extended by commands:
 ```
-c) variant [variant]
-c) feature [feature]
+c) variant <variant>
+c) feature <feature>
 ```
 
 Example:
@@ -93,14 +93,14 @@ c) nok
 p) fen rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
 c) ok
 ```
-Peripheral can send even `w` (white), `b` (black), `?` (unknown) instead of full piece information depending on internal sensors and knovelage.  
+Peripheral can send even `w` (white), `b` (black), `?` (unknown) instead of full piece information depending on internal sensors and knowelage.  
 ```
 p) fen ????????/????????/8/8/8/8/????????/????????
 ```
 ```
 p) fen bbbbbbbb/bbbbbbbb/8/8/8/8/wwwwwwww/wwwwwwww w
 ```
-During the round, peripheral can detect and indicate boards mismatch (cat disaster case) by sending `fen`. As example cat knocked down all white pieces.
+During the round, peripheral can detect and indicate boards mismatch by sending `fen`. As example cat knocked down all white pieces (cat disaster case).
 ```
 c) move a2a3
 p) ok
@@ -110,7 +110,7 @@ c) nok
 
 ## Move
 Command name is `move`.  
-Central and peripheral can send moves only when states are same.
+Central and peripheral can send moves only when states are same (central and peripherial are synchronised).
 ```
 c) move a2a3
 p) ok
@@ -130,16 +130,16 @@ En passant is indicated as pawn diagonal move.
 ```
 c) move a5b6
 ```
-
-## Promote
-Command name is `promote`.  
+ 
 Central and peripheral send moves with promotion.
 ```
 p) move a7a8q
 c) ok
 ```
 
-Cantral will promote instead peripheral if peripheral is not smart enough.
+## Promote
+Command name is `promote`. 
+Cantral will promote instead peripheral if peripheral can't distinquish promotion.
 ```
 p) move a7a8
 c) promote a7a8n
@@ -160,7 +160,7 @@ p) ok
 ```
 
 Sending `variant` means switch to them if supported.  
-Central should sent `variant` only bifore `fen`.  
+Central should sent `variant` only before `fen`.  
 If `variant` has not been sent then `standard` should be used.
 ```
 c) variant standard
@@ -218,10 +218,10 @@ c) feature msg
 
 Provides command:
 ```
-cp) msg [message]
+cp) msg <message>
 ```
 
-Used to show message in anther side.
+Used to show message in another side.
 ```
 c) msg Hello peripheral
 p) ok
@@ -239,7 +239,7 @@ c) feature last_move
 
 Provides command:
 ```
-c) last_move [uci]
+c) last_move <uci>
 ```
 
 Can be send only after central `fen`.  
@@ -261,9 +261,9 @@ Provides commands:
 ```
 cp) draw
 cp) resign
-c) check [king position]
-c) checkmate [king position]
-c) stalemate [king position]
+c) check <king position>
+c) checkmate <king position>
+c) stalemate <king position>
 c) end
 ```
 
@@ -339,7 +339,7 @@ c) feature side
 
 Provides command:
 ```
-c) side [color]
+c) side <color>
 ```
 
 Central can indicate peripheral side where color can be `w` (white), `b` (black), `?` (both).
@@ -356,8 +356,8 @@ c) feature history
 
 Provides commands:
 ```
-cp) undo [uci]
-cp) rendo [uci]
+cp) undo <uci>
+cp) rendo <uci>
 ```
 
 Central or peripheral can offer move round state. If opposite side accept then round state changes.
@@ -407,9 +407,9 @@ c) feature option
 Provides commands:
 ```
 c) options_begin
-p) option_item [name] [type] [value] [type params]
+p) option_item <name> <type> <value> <type params>
 p) options_end
-cp) option [name] [value]
+cp) option <name> <value>
 ```
 
 Central can read all options from peripheral.
@@ -433,10 +433,10 @@ p) ok
 Option types and their params:
 ```
 bool
-enum [values]
+enum <values>
 string
-int [min] [max] [optional step]
-float [min] [max] [optional step]
+int <min> <max> <optional step>
+float <min> <max> <optional step>
 ```
 
 Bool has only `true` and `false` values.
