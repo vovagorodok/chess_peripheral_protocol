@@ -23,6 +23,7 @@ String-based protocol that opens the possibility to connect and play chess from 
   - [Time](#time)
   - [Side](#side)
   - [Undo](#undo)
+  - [Moved](#moved)
   - [State Stream](#state-stream)
   - [Get State](#get-state)
   - [Set State](#set-state)
@@ -155,6 +156,11 @@ c) move a5b6
 Central and peripheral send moves with promotion.
 ```
 c) move a7a8q
+```
+Central can send moves even when unsynchronized.
+```
+p) unsync bbbbbbbb/bbbbbbbb/8/8/8/8/wwwwwwww/wwwwwwww w
+c) move a7a8
 ```
 
 ## Promote
@@ -387,6 +393,19 @@ p) undo a7a8
 c) promote a7a8q
 ```
 
+### Moved
+Feature `moved` require commands:
+```
+p) moved <uci>
+```
+Can be used mostly for mechanical devices where `move` and `undo` take more time.
+```
+c) move a2a3
+p) moved
+c) undo a2a3
+p) moved
+```
+
 ### State Stream
 Feature `state_stream` require commands:
 ```
@@ -438,6 +457,7 @@ Feature `option` require commands:
 c) options_begin
 p) option <name> <type> <value> <type params>
 p) options_end
+p) options_reset
 cp) set_option <name> <value>
 ```
 Central can read all options from peripheral.
