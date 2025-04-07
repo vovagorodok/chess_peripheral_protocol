@@ -15,8 +15,8 @@ String-based protocol that opens the possibility to connect and play chess from 
   - [Chess 960](#chess-960)
 - [Feature](#feature)
   - [Message](#message)
-  - [Last move](#last-move)
-  - [Round](#round)
+  - [Last Move](#last-move)
+  - [Check](#check)
   - [Score](#score)
   - [Time](#time)
   - [Side](#side)
@@ -27,7 +27,7 @@ String-based protocol that opens the possibility to connect and play chess from 
 - [Links](#links)
 
 ## Assumptions
-When central and peripheral has the same pieces positions we call it synchronized.  
+When central and peripheral has the same state (pieces positions) we call it synchronized.  
 Always central controls round rules and peripheral controls synchronization.  
 All commands and parameters should be written in lower case where words are splitted by the `_` sign.
 
@@ -49,26 +49,24 @@ rx characteristic: f535147e-b2c9-11ec-a0c2-8bbd706ec4e6
 ```` 
 
 ## Basic functionality
-Required commands:
+Require commands:
 ```
 c) begin <fen>
 p) sync <fen>
 p) unsync <fen>
 p) state <fen>
 cp) move <uci>
-c) ok
-c) nok
 c) promote <uci>
 c) end <reason>
+cp) ok
+cp) nok
 ```
-`ok` and `nok` commands are used for acknowelage, which must be answer for some commands
-
 Functionality can be extended by commands:
 ```
-c) variant <variant>
 c) feature <feature>
+c) variant <variant>
+c) set_variant <variant>
 ```
-
 Example:
 ```
 c) begin rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
@@ -76,22 +74,28 @@ p) sync rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
 c) move a2a3
 p) move a7a6
 c) ok
+c) end resign
 ```
 
 ## Begin
-Required commands: `begin`, `sync`, `unsync`.  
+Require commands:
+```
+c) begin <fen>
+p) sync <fen>
+p) unsync <fen>
+```
 Central always begins round by `begin`, peripheral responces by `sync` or `unsync`.  
-Peripheral send `sync` if has the same state:
+Peripheral send `sync` if has the same state.
 ```
 c) begin rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
 p) sync rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
 ```
-Peripheral send `unsync` if has different state:
+Peripheral send `unsync` if has different state.
 ```
 c) begin rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
 p) unsync rnbqkbnr/pppppppp/8/8/8/7P/1PPPPPPP/RNBQKBNR b
 ```
-Peripheral can send even `w` (white), `b` (black), `?` (unknown) instead of full piece information depending on internal sensors and knowelage:
+Peripheral can send even `w` (white), `b` (black), `?` (unknown) instead of full piece information depending on internal sensors and knowelage.
 ```
 p) unsync ????????/????????/8/8/8/8/????????/????????
 ```
@@ -100,56 +104,72 @@ p) unsync bbbbbbbb/bbbbbbbb/8/8/8/8/wwwwwwww/wwwwwwww w
 ```
 
 ## Unsync
-Required commands: `sync`, `unsync`, `state`.  
-During the round, peripheral can detect and indicate boards mismatch by sending `unsync`.  
-As example cat knocked down all white pieces (cat disaster case):
+Require commands:
 ```
-p) unsync ????????/????????/8/8/8/8/8/8
+p) sync <fen>
+p) unsync <fen>
+p) state <fen>
 ```
-Peripheral send `unsync` if has different state, then peripheral can send `state` until both states become the same:
+Peripheral can send `state` until both states become the same.
 ```
 p) unsync rnbqkbnr/pppppppp/8/8/8/7P/1PPPPPPP/RNBQKBNR
 p) state rnbqkbnr/pppppppp/8/8/8/8/1PPPPPPP/RNBQKBNR
 p) sync rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
 ```
+During the round, peripheral can detect and indicate boards mismatch by sending `unsync`.  
+As example cat knocked down all white pieces (cat disaster case).
+```
+p) unsync ????????/????????/8/8/8/8/8/8
+```
 
 ## Move
-Required commands: `move`, `ok`, `nok`.  
-Only central controls round and should accept or reject peripheral moves:
+Require commands:
+```
+cp) move <uci>
+c) ok
+c) nok
+```
+Only central controls round and should accept or reject peripheral moves.
 ```
 p) move a2a3
 c) ok
 p) move a7a6
 c) nok
 ```
-Peripheral should not send responces for central moves:
+Peripheral should not send responces for central moves.
 ```
 c) move a7a4
 ```
-Castling is indicated as king move:
+Castling is indicated as king move.
 ```
 c) move e1g1
 ```
-En passant is indicated as pawn diagonal move:
+En passant is indicated as pawn diagonal move.
 ```
 c) move a5b6
 ```
-Central and peripheral send moves with promotion:
+Central and peripheral send moves with promotion.
 ```
 p) move a7a8q
 ```
 
 ## Promote
-Required commands: `promote`.  
-Cantral will promote instead peripheral by sending `promote` instead `ok` or `nok` if peripheral can't distinquish promotion:
+Require commands:
+```
+c) promote <uci>
+```
+Cantral will promote instead peripheral by sending `promote` instead `ok` or `nok` if peripheral can't distinquish promotion.
 ```
 p) move a7a8
 c) promote a7a8n
 ```
 
 ## End
-Required commands: `end`.  
-Peripheral should not response:
+Require commands:
+```
+c) end <reason>
+```
+Peripheral should not response.
 ```
 c) end checkmate
 ```
@@ -166,8 +186,14 @@ abort
 ```
 
 ## Variant
-Required commands: `variant`, `set_variant`.  
-Cenral can check all supported variants:
+Require commands:  
+```
+c) variant <variant>
+c) set_variant <variant>
+p) ok
+p) nok
+```
+Cenral can check all supported variants.
 ```
 c) variant standard
 p) ok
@@ -178,7 +204,7 @@ p) ok
 ```
 
 Sending `set_variant` means switch to them if supported.  
-Central should sent `variant` only before `begin`:
+Central should sent `set_variant` only before `begin`.
 ```
 c) set_variant standard
 c) begin rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
@@ -209,9 +235,14 @@ c) move e1h1
 ```
 
 ## Feature
-Required commands: `feature`.  
+Require commands:
+```
+c) feature <feature>
+p) ok
+p) nok
+```
 Cenral can check all features that are supported by peripheral.  
-If central didn't ask for feature, then it should be disabled on both sides:
+If central didn't ask for feature, then it should be disabled on both sides.
 ```
 c) feature last_move
 p) ok
@@ -222,62 +253,48 @@ p) ok
 ```
 
 ### Message
-Feature name is `msg`.
-```
-c) feature msg
-```
-
-Provides command:
+Feature `msg` require commands:
 ```
 cp) msg <message>
 ```
-
 Used to show message in another side.
 ```
 c) msg Hello peripheral
-p) ok
 ```
 ```
 p) msg Hello central
-c) ok
 ```
 
-### Last move
-Feature name is `last_move`.
-```
-c) feature last_move
-```
-
-Provides command:
+### Last Move
+Feature `last_move` require commands:
 ```
 c) last_move <uci>
 ```
-
-Can be send only after central `fen`.  
+Can be send only after: `begin`, `undo`.  
 When round doesn't have last move, then command shouldn't be sent.
 ```
-c) fen rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR w
-p) ok
+c) begin rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR w
 c) last_move a2a3
-p) ok
 ```
 
-### Round
-Feature name is `round`.
+### Check
+Feature `check` require commands:
 ```
-c) feature round
-```
-
-Provides commands:
-```
-cp) draw
-cp) resign
 c) check <king position>
-c) checkmate <king position>
-c) stalemate <king position>
-c) end
+```
+Can be send only after: `begin`, `move`, `last_move`, `undo`.  
+When round doesn't have check, then command shouldn't be sent.
+```
+c) begin rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR w
+c) check a2
+```
+```
+p) move a7a6
+c) ok
+c) check a2
 ```
 
+### Draw Offer
 Central or peripheral can offer draw. If opposite side accept then round ends with draw result.
 ```
 c) draw
