@@ -17,11 +17,15 @@ String-based protocol that opens the possibility to connect and play chess from 
   - [Message](#message)
   - [Last Move](#last-move)
   - [Check](#check)
+  - [Draw Offer](#draw-offer)
+  - [Resign](#resign)
   - [Score](#score)
   - [Time](#time)
   - [Side](#side)
-  - [History](#history)
-  - [Prefen](#prefen)
+  - [Undo](#undo)
+  - [State Stream](#state-stream)
+  - [Get State](#get-state)
+  - [Set State](#set-state)
   - [Option](#option)
 - [Contributors](#contributors)
 - [Links](#links)
@@ -93,7 +97,7 @@ p) sync rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
 Peripheral send `unsync` if has different state.
 ```
 c) begin rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
-p) unsync rnbqkbnr/pppppppp/8/8/8/7P/1PPPPPPP/RNBQKBNR b
+p) unsync rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR b
 ```
 Peripheral can send even `w` (white), `b` (black), `?` (unknown) instead of full piece information depending on internal sensors and knowelage.
 ```
@@ -112,7 +116,7 @@ p) state <fen>
 ```
 Peripheral can send `state` until both states become the same.
 ```
-p) unsync rnbqkbnr/pppppppp/8/8/8/7P/1PPPPPPP/RNBQKBNR
+p) unsync rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR
 p) state rnbqkbnr/pppppppp/8/8/8/8/1PPPPPPP/RNBQKBNR
 p) sync rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
 ```
@@ -150,7 +154,7 @@ c) move a5b6
 ```
 Central and peripheral send moves with promotion.
 ```
-p) move a7a8q
+c) move a7a8q
 ```
 
 ## Promote
@@ -270,8 +274,8 @@ Feature `last_move` require commands:
 ```
 c) last_move <uci>
 ```
-Can be send only after: `begin`, `undo`.  
-When round doesn't have last move, then command shouldn't be sent.
+When round doesn't have last move, then command shouldn't be sent.  
+Can be send only after: `begin`, `undo`.
 ```
 c) begin rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR w
 c) last_move a2a3
@@ -282,8 +286,8 @@ Feature `check` require commands:
 ```
 c) check <king position>
 ```
-Can be send only after: `begin`, `move`, `last_move`, `undo`.  
-When round doesn't have check, then command shouldn't be sent.
+When round doesn't have check, then command shouldn't be sent.  
+Can be send only after: `begin`, `move`, `last_move`, `undo`.
 ```
 c) begin rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR w
 c) check a2
@@ -295,167 +299,158 @@ c) check a2
 ```
 
 ### Draw Offer
-Central or peripheral can offer draw. If opposite side accept then round ends with draw result.
+Feature `draw_offer` require commands:
 ```
-c) draw
+cp) draw_offer
+cp) ok
+cp) nok
+```
+If opposite side accept then round ends with draw result. Central should not send `end` command.
+```
+c) draw_offer
 p) ok
 ```
-
 If opposite side reject then round continues.
 ```
-p) draw
+p) draw_offer
 c) nok
 ```
 
-Central or peripheral can indicate round resignation that can't be rejected.
+### Resign
+Feature `resign` require commands:
 ```
 p) resign
-c) ok
 ```
-
-Central can indicate round check, checkmate and stalemate that can't be rejected.
+Peripheral can indicate round resignation that can't be rejected.
 ```
-c) check a3
-p) ok
-```
-
-Central can indicate round ending in case of other varints with other ending rules.
-```
-c) end
-p) ok
+p) resign
 ```
 
 ### Score
-Feature name is `score`.
-```
-c) feature score
-```
-
-Provides command:
+Feature `score` require commands:
 ```
 c) score <white> <black>
 ```
-
-Central can indicate score after round ending.
+Central can indicate score after round ending in format `x.0` or `x.5` if draw.
 ```
 c) score 1.5 2.5
-p) ok
 ```
 
 ### Time
-Feature name is `time`.
-```
-c) feature time
-```
-
-Provides command:
+Feature `time` require commands:
 ```
 c) time <white> <black>
 ```
-
 Central can indicate remaining time of each side in miliseconds.
 ```
 c) time 31444 12510
-p) ok
 ```
+Can be send only after: `begin`, `move`, `last_move`, `undo`.
 
 ### Side
-Feature name is `side`.
-```
-c) feature side
-```
-
-Provides command:
+Feature `side` require commands:
 ```
 c) side <color>
 ```
-
 Central can indicate peripheral side where color can be `w` (white), `b` (black), `?` (both).
 ```
 c) side w
-p) ok
+```
+Central should sent `side` only before `begin`.
+```
+c) set_variant standard
+c) side ?
+c) begin rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
 ```
 
-### History
-Feature name is `history`.
-```
-c) feature history
-```
-
-Provides commands:
+### Undo
+Feature `undo` require commands:
 ```
 cp) undo <uci>
-cp) rendo <uci>
-```
-
-Central or peripheral can offer move round state. If opposite side accept then round state changes.
-```
-c) undo a3a2
-p) ok
-```
-
-If opposite side reject then round continues with the same sate.
-```
-p) rendo a2a3
+c) ok
 c) nok
 ```
-
-### Prefen
-Feature name is `prefen`.
+Only central controls round and should accept or reject peripheral undo moves as for `move`.
 ```
-c) feature prefen
-```
-
-Provides commands:
-```
-cp) prefens_begin
-cp) prefens_end
-cp) prefen <fen>
-```
-Can be used to check opposite state.  
-For example central can check and begin round from peripheral state.  
-Central or peripheral can request `prefen` broadcasting each time when opposite state changes.
-```
-c) prefens_begin
-p) ok
-p) prefen rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR w
+p) undo a2a3
 c) ok
-p) prefen rnbqkbnr/pppppppp/8/8/P7/8/1PPPPPPP/RNBQKBNR w
+p) undo a7a6
+c) nok
+c) undo a7a4
+```
+Castling, En passant and promotion are indicated as for `move` command.
+```
+c) undo a7a8q
+```
+```
+p) undo a7a8
+c) promote a7a8q
+```
+
+### State Stream
+Feature `state_stream` require commands:
+```
+cp) state <fen>
+```
+Central or peripheral indicate `state` each time when state changes even in synchronized state in order to indicate pieces removing and adding bifore move.
+```
+c) begin rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
+p) sync rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
+p) state rnbqkbnr/pppppppp/8/8/8/8/1PPPPPPP/RNBQKBNR
+p) state rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR
+p) move a2a3
 c) ok
-c) prefens_end
-p) ok
+p) state rnbqkbnr/1ppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR
+p) state rnbqkbnr/1ppppppp/p7/8/8/P7/1PPPPPPP/RNBQKBNR
+c) move a7a6
+```
+
+### Get State
+Feature `get_state` require commands:
+```
+c) get_state
+p) state <fen>
+```
+Central can check and begin round from peripheral state.
+```
+c) get_state
+p) state rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
+c) begin rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
+```
+Peripheral can send `state` for each change until `begin`.
+
+### Set State
+Feature `set_state` require commands:
+```
+c) set_state
+p) unsync_setible <fen>
+```
+Central can request autocomplete if peripheral can do it by indicating `unsync_setible` instead `unsync`.
+```
+c) begin rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR b
+p) unsync_setible rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
+c) set_state
 ```
 
 ### Option
-Feature name is `option`.
-```
-c) feature option
-```
-
-Provides commands:
+Feature `option` require commands:
 ```
 c) options_begin
-p) option_item <name> <type> <value> <type params>
+p) option <name> <type> <value> <type params>
 p) options_end
-cp) option <name> <value>
+cp) set_option <name> <value>
 ```
-
 Central can read all options from peripheral.
 ```
 c) options_begin
-p) ok
-p) option_item brightness int 4 1 4 1
-c) ok
-p) option_item animation_speed int 2 1 8 1
-c) ok
+p) option brightness int 4 1 4 1
+p) option animation_speed int 2 1 8 1
 p) options_end
-c) ok
 ```
 
 Central or peripheral can change option.
 ```
-c) option brightness 3
-p) ok
+c) set_option brightness 3
 ```
 
 Option types and their params:
@@ -469,23 +464,23 @@ float <min> <max> <optional step>
 
 Bool has only `true` and `false` values.
 ```
-p) option_item option_name bool false
+p) option option_name bool false
 ```
 Enum contains predefined values.
 ```
-p) option_item option_name enum value2 value1 value2 value3
+p) option option_name enum value2 value1 value2 value3
 ```
 Str contains any text information.
 ```
-p) option_item option_name str Hello world
+p) option option_name str Hello world
 ```
 Int step param is optional.
 ```
-p) option_item option_name int 0 0 8
+p) option option_name int 0 0 8
 ```
 Float step param is optional.
 ```
-p) option_item option_name float 0.2 -0.1 0.5
+p) option option_name float 0.2 -0.1 0.5
 ```
 
 Predefined option names that can be reused:
