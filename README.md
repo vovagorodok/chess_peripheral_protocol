@@ -2,13 +2,15 @@
 String-based protocol that opens the possibility to connect and play chess from an app (which we call `central`) with devices like electronic boards, clocks, and others (called `peripheral`) in a common way.
 
 ## Table of contents
-- [Physical layer](#physical-layer)
-  - [Bluetooth LE implementation](#bluetooth-le-implementation)
 - [Assumptions](#assumptions)
+- [Physical layer](#physical-layer)
+  - [Bluetooth LE](#bluetooth-le)
 - [Basic functionality](#basic-functionality)
-- [Fen](#fen)
+- [Begin](#begin)
+- [Unsync](#unsync)
 - [Move](#move)
 - [Promote](#promote)
+- [End](#end)
 - [Variant](#variant)
   - [Chess 960](#chess-960)
 - [Feature](#feature)
@@ -24,35 +26,40 @@ String-based protocol that opens the possibility to connect and play chess from 
 - [Contributors](#contributors)
 - [Links](#links)
 
+## Assumptions
+When central and peripheral has the same pieces positions we call it synchronized.  
+Always central controls round rules and peripheral controls synchronization.  
+All commands and parameters should be written in lower case where words are splitted by the `_` sign.
+
+Designation of device that sends command:  
+`c)` - central  
+`p)` - peripheral  
+`cp)` - central or peripheral 
+
 ## Physical Layer
 The protocol should be universal enough to allow implementations through different physical interfaces like USB, BLE, and more.
 
-### Bluetooth LE implementation
+### Bluetooth LE
 Each peripheral should advertise on service with two string characteristics that simulate serial interface.  
 Following uuids are defined:
 ````
 service: f5351050-b2c9-11ec-a0c0-b3bc53b08d33
 tx characteristic: f53513ca-b2c9-11ec-a0c1-639b8957db99
 rx characteristic: f535147e-b2c9-11ec-a0c2-8bbd706ec4e6
-````
-
-## Assumptions
-All commands should be written in lower case where words are splitted by the `_` sign.  
-Central always controls round rules. Peripheral always controls board synchronization.
-
-Designation of device that sends command:  
-`c)` - central  
-`p)` - peripheral  
-`cp)` - central or peripheral  
+```` 
 
 ## Basic functionality
 Required commands:
 ```
-cp) ok
-cp) nok 
-cp) fen <fen>
+c) begin <fen>
+p) sync <fen>
+p) unsync <fen>
+p) state <fen>
 cp) move <uci>
+c) ok
+c) nok
 c) promote <uci>
+c) end <reason>
 ```
 `ok` and `nok` commands are used for acknowelage, which must be answer for some commands
 
@@ -64,88 +71,103 @@ c) feature <feature>
 
 Example:
 ```
-c) fen rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
-p) ok
+c) begin rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
+p) sync rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
 c) move a2a3
-p) ok
 p) move a7a6
 c) ok
 ```
 
-## Fen
-Command name is `fen`.  
-Rapresents round state.
-Central always starts round by sending `fen`.
-Peripheral send `ok` if has the same state.
+## Begin
+Required commands: `begin`, `sync`, `unsync`.  
+Central always begins round by `begin`, peripheral responces by `sync` or `unsync`.  
+Peripheral send `sync` if has the same state:
 ```
-c) fen rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
-p) ok
+c) begin rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
+p) sync rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
 ```
-Peripheral send `nok` if has different state, then central or peripheral can send `fen` until both state become the same.
+Peripheral send `unsync` if has different state:
 ```
-c) fen rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
-p) nok
-p) fen rnbqkbnr/pppppppp/8/8/8/7P/1PPPPPPP/RNBQKBNR
-c) nok
-p) fen rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
-c) ok
+c) begin rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
+p) unsync rnbqkbnr/pppppppp/8/8/8/7P/1PPPPPPP/RNBQKBNR b
 ```
-Peripheral can send even `w` (white), `b` (black), `?` (unknown) instead of full piece information depending on internal sensors and knowelage.  
+Peripheral can send even `w` (white), `b` (black), `?` (unknown) instead of full piece information depending on internal sensors and knowelage:
 ```
-p) fen ????????/????????/8/8/8/8/????????/????????
+p) unsync ????????/????????/8/8/8/8/????????/????????
 ```
 ```
-p) fen bbbbbbbb/bbbbbbbb/8/8/8/8/wwwwwwww/wwwwwwww w
+p) unsync bbbbbbbb/bbbbbbbb/8/8/8/8/wwwwwwww/wwwwwwww w
 ```
-During the round, peripheral can detect and indicate boards mismatch by sending `fen`. As example cat knocked down all white pieces (cat disaster case).
+
+## Unsync
+Required commands: `sync`, `unsync`, `state`.  
+During the round, peripheral can detect and indicate boards mismatch by sending `unsync`.  
+As example cat knocked down all white pieces (cat disaster case):
 ```
-c) move a2a3
-p) ok
-p) fen ????????/????????/8/8/8/8/8/8
-c) nok
+p) unsync ????????/????????/8/8/8/8/8/8
+```
+Peripheral send `unsync` if has different state, then peripheral can send `state` until both states become the same:
+```
+p) unsync rnbqkbnr/pppppppp/8/8/8/7P/1PPPPPPP/RNBQKBNR
+p) state rnbqkbnr/pppppppp/8/8/8/8/1PPPPPPP/RNBQKBNR
+p) sync rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
 ```
 
 ## Move
-Command name is `move`.  
-Central and peripheral can send moves only when states are same (central and peripherial are synchronised).
+Required commands: `move`, `ok`, `nok`.  
+Only central controls round and should accept or reject peripheral moves:
 ```
-c) move a2a3
-p) ok
-p) move a7a6
+p) move a2a3
 c) ok
-```
-Only central can reject moves.
-```
-p) move a7a4
+p) move a7a6
 c) nok
 ```
-Castling is indicated as king move.
+Peripheral should not send responces for central moves:
+```
+c) move a7a4
+```
+Castling is indicated as king move:
 ```
 c) move e1g1
 ```
-En passant is indicated as pawn diagonal move.
+En passant is indicated as pawn diagonal move:
 ```
 c) move a5b6
 ```
-Central and peripheral send moves with promotion.
+Central and peripheral send moves with promotion:
 ```
 p) move a7a8q
-c) ok
 ```
 
 ## Promote
-Command name is `promote`. 
-Cantral will promote instead peripheral if peripheral can't distinquish promotion.
+Required commands: `promote`.  
+Cantral will promote instead peripheral by sending `promote` instead `ok` or `nok` if peripheral can't distinquish promotion:
 ```
 p) move a7a8
 c) promote a7a8n
-p) ok
+```
+
+## End
+Required commands: `end`.  
+Peripheral should not response:
+```
+c) end checkmate
+```
+
+List of predefined end reasons:
+```
+undefined
+checkmate
+stalemate
+draw
+timeout
+resign
+abort
 ```
 
 ## Variant
-Command name is `variant`.  
-Represents round variant.
-Cenral can check all supported variants.
+Required commands: `variant`, `set_variant`.  
+Cenral can check all supported variants:
 ```
 c) variant standard
 p) ok
@@ -155,21 +177,14 @@ c) variant 3_check
 p) ok
 ```
 
-Sending `variant` means switch to them if supported.  
-Central should sent `variant` only before `fen`.  
-If `variant` has not been sent then `standard` should be used.
+Sending `set_variant` means switch to them if supported.  
+Central should sent `variant` only before `begin`:
 ```
-c) variant standard
-p) ok
-c) fen rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
-p) ok
+c) set_variant standard
+c) begin rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
 ```
-
-If peripheral doesn't support variant then central shouldn't send `fen` for them.
-```
-c) variant chess_960
-p) nok
-```
+If `set_variant` was never send then `standard` should be used.  
+If peripheral doesn't support variant then central shouldn't send `begin` for them.
 
 List of predefined variants names:
 ```
@@ -186,7 +201,7 @@ crazy_house
 If specific variant doesn't have chapter it means that it use exactly the same commands as `standard`.
 
 ### Chess 960
-Variant name is `chess_960`.  
+Variant name: `chess_960`.  
 Known also as fischer random.  
 Same as `standard`, but castling is indicated as king and rook starting positions.
 ```
@@ -194,13 +209,13 @@ c) move e1h1
 ```
 
 ## Feature
-Command name is `feature`.  
+Required commands: `feature`.  
 Cenral can check all features that are supported by peripheral.  
-If central didn't ask for feature, then it should be disabled on both sides.
+If central didn't ask for feature, then it should be disabled on both sides:
 ```
 c) feature last_move
 p) ok
-c) feature time
+c) feature check
 p) nok
 c) feature msg
 p) ok
@@ -430,7 +445,7 @@ Option types and their params:
 ```
 bool
 enum <values>
-string
+str
 int <min> <max> <optional step>
 float <min> <max> <optional step>
 ```
@@ -443,9 +458,9 @@ Enum contains predefined values.
 ```
 p) option_item option_name enum value2 value1 value2 value3
 ```
-String contains any text information.
+Str contains any text information.
 ```
-p) option_item option_name string Hello world
+p) option_item option_name str Hello world
 ```
 Int step param is optional.
 ```
