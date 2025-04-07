@@ -1,5 +1,5 @@
 # Chess Peripheral Protocol
-String-based protocol that opens the possibility to connect and play chess from an app (which we call 'central') with devices like electronic boards, clocks, and others (called 'peripherals') in a common way.
+String-based protocol that opens the possibility to connect and play chess from an app (which we call `central`) with devices like electronic boards, clocks, and others (called `peripheral`) in a common way.
 
 ## Table of contents
 - [Physical layer](#physical-layer)
@@ -25,7 +25,7 @@ String-based protocol that opens the possibility to connect and play chess from 
 - [Links](#links)
 
 ## Physical Layer
-The protocol should be universal enough to allow implementations through different physical interfaces like RS-232, BLE, and more.
+The protocol should be universal enough to allow implementations through different physical interfaces like USB, BLE, and more.
 
 ### Bluetooth LE implementation
 Each peripheral should advertise on service with two string characteristics that simulate serial interface.  
@@ -36,12 +36,9 @@ tx characteristic: f53513ca-b2c9-11ec-a0c1-639b8957db99
 rx characteristic: f535147e-b2c9-11ec-a0c2-8bbd706ec4e6
 ````
 
-You can use our arduino implementation as reference:
-https://github.com/vovagorodok/ArduinoBleChess
-
 ## Assumptions
 All commands should be written in lower case where words are splitted by the `_` sign.  
-Central always controls round rules.
+Central always controls round rules. Peripheral always controls board synchronization.
 
 Designation of device that sends command:  
 `c)` - central  
@@ -57,7 +54,7 @@ cp) fen <fen>
 cp) move <uci>
 c) promote <uci>
 ```
-`ok` and `nok` commands are used for acknowelage, which must be answer for resto of command besiede `promote`
+`ok` and `nok` commands are used for acknowelage, which must be answer for some commands
 
 Functionality can be extended by commands:
 ```
@@ -130,7 +127,6 @@ En passant is indicated as pawn diagonal move.
 ```
 c) move a5b6
 ```
- 
 Central and peripheral send moves with promotion.
 ```
 p) move a7a8q
@@ -305,7 +301,7 @@ c) feature score
 
 Provides command:
 ```
-c) score [white] [black]
+c) score <white> <black>
 ```
 
 Central can indicate score after round ending.
@@ -322,7 +318,7 @@ c) feature time
 
 Provides command:
 ```
-c) time [white] [black]
+c) time <white> <black>
 ```
 
 Central can indicate remaining time of each side in miliseconds.
@@ -382,7 +378,7 @@ Provides commands:
 ```
 cp) prefens_begin
 cp) prefens_end
-cp) prefen [fen]
+cp) prefen <fen>
 ```
 Can be used to check opposite state.  
 For example central can check and begin round from peripheral state.  
@@ -482,4 +478,6 @@ CECP:
 http://hgm.nubati.net/CECP.html   
 https://www.gnu.org/software/xboard/engine-intf.html  
 UCI:  
-http://wbec-ridderkerk.nl/html/UCIProtocol.html
+http://wbec-ridderkerk.nl/html/UCIProtocol.html  
+Libraries:  
+https://github.com/vovagorodok/ArduinoBleChess
