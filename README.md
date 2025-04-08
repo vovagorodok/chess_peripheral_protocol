@@ -11,6 +11,7 @@ String-based protocol that opens the possibility to connect and play chess from 
 - [Move](#move)
 - [Promote](#promote)
 - [End](#end)
+- [Error](#error)
 - [Variant](#variant)
   - [Chess 960](#chess-960)
 - [Feature](#feature)
@@ -65,6 +66,7 @@ c) promote <uci>
 c) end <reason>
 cp) ok
 cp) nok
+cp) err <message>
 ```
 Functionality can be extended by commands:
 ```
@@ -195,6 +197,16 @@ resign
 abort
 ```
 
+## Error
+Require commands:
+```
+cp) err <message>
+```
+Used to show error in another side.
+```
+p) err Unsupported command
+```
+
 ## Variant
 Require commands:  
 ```
@@ -293,7 +305,7 @@ Feature `check` require commands:
 c) check <king position>
 ```
 When round doesn't have check, then command shouldn't be sent.  
-Can be send only after: `begin`, `move`, `last_move`, `undo`.
+Can be send only bifore `end` and after: `begin`, `move`, `last_move`, `undo`.
 ```
 c) begin rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR w
 c) check a2
@@ -302,6 +314,7 @@ c) check a2
 p) move a7a6
 c) ok
 c) check a2
+c) end checkmate
 ```
 
 ### Draw Offer
