@@ -93,7 +93,7 @@ c) begin <fen>
 p) sync <fen>
 p) unsync <fen>
 ```
-Central always begins round by `begin`, peripheral responces by `sync` or `unsync`.  
+Central always begins round by `begin`, peripheral responses by `sync` or `unsync`.  
 Peripheral send `sync` if has the same state.
 ```
 c) begin rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
@@ -104,7 +104,7 @@ Peripheral send `unsync` if has different state.
 c) begin rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
 p) unsync rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR b
 ```
-Peripheral can send even `w` (white), `b` (black), `?` (unknown) instead of full piece information depending on internal sensors and knowelage.
+Peripheral can send even `w` (white), `b` (black), `?` (unknown) instead of full piece information depending on internal sensors and knowledge.
 ```
 p) unsync ????????/????????/8/8/8/8/????????/????????
 ```
@@ -145,7 +145,7 @@ c) ok
 p) move a7a6
 c) nok
 ```
-Peripheral should not send responces for central moves.
+Peripheral should not send responses for central moves.
 ```
 c) move a7a4
 ```
@@ -172,7 +172,7 @@ Require commands:
 ```
 c) promote <uci>
 ```
-Cantral will promote instead peripheral by sending `promote` instead `ok` or `nok` if peripheral can't distinquish promotion.
+Central will promote instead peripheral by sending `promote` instead `ok` or `nok` if peripheral can't distinguish promotion.
 ```
 p) move a7a8
 c) promote a7a8n
@@ -217,7 +217,7 @@ c) set_variant <variant>
 p) ok
 p) nok
 ```
-Cenral can check all supported variants.
+Central can check all supported variants.
 ```
 c) variant standard
 p) ok
@@ -265,7 +265,7 @@ c) feature <feature>
 p) ok
 p) nok
 ```
-Cenral can check all features that are supported by peripheral.  
+Central can check all features that are supported by peripheral.  
 If central didn't ask for feature, then it should be disabled on both sides.
 ```
 c) feature last_move
@@ -336,7 +336,7 @@ Feature `check` require commands:
 c) check <king position>
 ```
 When round doesn't have check, then command shouldn't be sent.  
-Can be send only bifore `end` and after: `begin`, `last_move`, `move`, `undo`.
+Can be send only before `end` and after: `begin`, `last_move`, `move`, `undo`.
 ```
 c) begin rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR w
 c) check a2
@@ -461,7 +461,7 @@ Feature `time` require commands:
 ```
 c) time <white> <black>
 ```
-Central can indicate remaining time of each side in miliseconds.
+Central can indicate remaining time of each side in milliseconds.
 ```
 c) time 31444 12510
 ```
@@ -472,7 +472,7 @@ Feature `state_stream` require commands:
 ```
 cp) state <fen>
 ```
-Central or peripheral indicate `state` each time when state changes even in synchronized state in order to indicate pieces removing and adding bifore move.
+Central or peripheral indicate `state` each time when state changes even in synchronized state in order to indicate pieces removing and adding before move.
 ```
 c) begin rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
 p) sync rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
