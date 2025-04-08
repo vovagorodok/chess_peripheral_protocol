@@ -22,9 +22,9 @@ String-based protocol that opens the possibility to connect and play chess from 
   - [Moved](#moved)
   - [Resign](#resign)
   - [Draw Offer](#draw-offer)
+  - [Side](#side)
   - [Score](#score)
   - [Time](#time)
-  - [Side](#side)
   - [State Stream](#state-stream)
   - [Get State](#get-state)
   - [Set State](#set-state)
@@ -387,6 +387,22 @@ p) draw_offer
 c) nok
 ```
 
+### Side
+Feature `side` require commands:
+```
+c) side <color>
+```
+Central can indicate peripheral side where color can be `w` (white), `b` (black), `?` (both).
+```
+c) side w
+```
+Central should sent `side` only before `begin`.
+```
+c) set_variant standard
+c) side ?
+c) begin rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
+```
+
 ### Score
 Feature `score` require commands:
 ```
@@ -407,22 +423,6 @@ Central can indicate remaining time of each side in miliseconds.
 c) time 31444 12510
 ```
 Can be send only after: `begin`, `move`, `last_move`, `undo`.
-
-### Side
-Feature `side` require commands:
-```
-c) side <color>
-```
-Central can indicate peripheral side where color can be `w` (white), `b` (black), `?` (both).
-```
-c) side w
-```
-Central should sent `side` only before `begin`.
-```
-c) set_variant standard
-c) side ?
-c) begin rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
-```
 
 ### State Stream
 Feature `state_stream` require commands:
