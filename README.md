@@ -20,8 +20,8 @@ String-based protocol that opens the possibility to connect and play chess from 
   - [Last Move](#last-move)
   - [Check](#check)
   - [Moved](#moved)
-  - [Draw Offer](#draw-offer)
   - [Resign](#resign)
+  - [Draw Offer](#draw-offer)
   - [Score](#score)
   - [Time](#time)
   - [Side](#side)
@@ -349,7 +349,7 @@ c) end checkmate
 ### Moved
 Feature `moved` require commands:
 ```
-p) moved <uci>
+p) moved
 ```
 Can be used mostly for mechanical devices where `move` and `undo` take more time.
 ```
@@ -357,6 +357,16 @@ c) move a2a3
 p) moved
 c) undo a2a3
 p) moved
+```
+
+### Resign
+Feature `resign` require commands:
+```
+p) resign
+```
+Peripheral can indicate round resignation that can't be rejected.
+```
+p) resign
 ```
 
 ### Draw Offer
@@ -375,16 +385,6 @@ If opposite side reject then round continues.
 ```
 p) draw_offer
 c) nok
-```
-
-### Resign
-Feature `resign` require commands:
-```
-p) resign
-```
-Peripheral can indicate round resignation that can't be rejected.
-```
-p) resign
 ```
 
 ### Score
