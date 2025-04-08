@@ -16,15 +16,15 @@ String-based protocol that opens the possibility to connect and play chess from 
   - [Chess 960](#chess-960)
 - [Feature](#feature)
   - [Message](#message)
+  - [Undo](#undo)
   - [Last Move](#last-move)
   - [Check](#check)
+  - [Moved](#moved)
   - [Draw Offer](#draw-offer)
   - [Resign](#resign)
   - [Score](#score)
   - [Time](#time)
   - [Side](#side)
-  - [Undo](#undo)
-  - [Moved](#moved)
   - [State Stream](#state-stream)
   - [Get State](#get-state)
   - [Set State](#set-state)
@@ -287,6 +287,30 @@ c) msg Hello peripheral
 p) msg Hello central
 ```
 
+### Undo
+Feature `undo` require commands:
+```
+cp) undo <uci>
+c) ok
+c) nok
+```
+Only central controls round and should accept or reject peripheral undo moves as for `move`.
+```
+p) undo a2a3
+c) ok
+p) undo a7a6
+c) nok
+c) undo a7a4
+```
+Castling, En passant and promotion are indicated as for `move` command.
+```
+c) undo a7a8q
+```
+```
+p) undo a7a8
+c) promote a7a8q
+```
+
 ### Last Move
 Feature `last_move` require commands:
 ```
@@ -320,6 +344,19 @@ p) move a7a6
 c) ok
 c) check a2
 c) end checkmate
+```
+
+### Moved
+Feature `moved` require commands:
+```
+p) moved <uci>
+```
+Can be used mostly for mechanical devices where `move` and `undo` take more time.
+```
+c) move a2a3
+p) moved
+c) undo a2a3
+p) moved
 ```
 
 ### Draw Offer
@@ -385,43 +422,6 @@ Central should sent `side` only before `begin`.
 c) set_variant standard
 c) side ?
 c) begin rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
-```
-
-### Undo
-Feature `undo` require commands:
-```
-cp) undo <uci>
-c) ok
-c) nok
-```
-Only central controls round and should accept or reject peripheral undo moves as for `move`.
-```
-p) undo a2a3
-c) ok
-p) undo a7a6
-c) nok
-c) undo a7a4
-```
-Castling, En passant and promotion are indicated as for `move` command.
-```
-c) undo a7a8q
-```
-```
-p) undo a7a8
-c) promote a7a8q
-```
-
-### Moved
-Feature `moved` require commands:
-```
-p) moved <uci>
-```
-Can be used mostly for mechanical devices where `move` and `undo` take more time.
-```
-c) move a2a3
-p) moved
-c) undo a2a3
-p) moved
 ```
 
 ### State Stream
