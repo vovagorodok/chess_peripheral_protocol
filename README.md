@@ -298,6 +298,11 @@ Can be send only after: `begin`, `undo`.
 c) begin rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR w
 c) last_move a2a3
 ```
+```
+p) undo a7a6
+c) ok
+c) last_move a2a3
+```
 
 ### Check
 Feature `check` require commands:
@@ -305,7 +310,7 @@ Feature `check` require commands:
 c) check <king position>
 ```
 When round doesn't have check, then command shouldn't be sent.  
-Can be send only bifore `end` and after: `begin`, `move`, `last_move`, `undo`.
+Can be send only bifore `end` and after: `begin`, `last_move`, `move`, `undo`.
 ```
 c) begin rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR w
 c) check a2
