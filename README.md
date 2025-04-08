@@ -22,6 +22,8 @@ String-based protocol that opens the possibility to connect and play chess from 
   - [Moved](#moved)
   - [Resign](#resign)
   - [Draw Offer](#draw-offer)
+  - [Draw Reason](#draw-reason)
+  - [Variant Reason](#variant-reason)
   - [Side](#side)
   - [Score](#score)
   - [Time](#time)
@@ -385,6 +387,47 @@ If opposite side reject then round continues.
 ```
 p) draw_offer
 c) nok
+```
+
+### Draw Reason
+Feature `draw_reason` require commands:
+```
+c) end <reason>
+```
+Draw reasons can be:
+- Draw Offer – Mutual Agreement, both players agree to a draw.
+- Threefold Repetition – The same position occurs three times with the same possible moves (claimed by a player).
+- Fifty-Move Rule – If 50 moves pass without a pawn move or capture, a draw can be claimed.
+- Insufficient Material – Neither player has enough pieces to checkmate (e.g., king vs. king, king and knight vs. king).
+- Dead Position – The position is such that no sequence of legal moves can lead to checkmate (e.g., blocked pawns with no way to progress).
+
+Central can send draw reason instead draw.
+```
+c) end fifty_move
+```
+
+List of predefined end reasons:
+```
+draw_offer
+threefold_repetition
+fifty_move
+insufficient_material
+dead_position
+```
+
+### Variant Reason
+Feature `variant_reason` require commands:
+```
+c) end <reason>
+```
+Central can send variant reason instead undefined.
+```
+c) end king_of_the_hill
+```
+List of predefined end reasons:
+```
+3_check
+king_of_the_hill
 ```
 
 ### Side
