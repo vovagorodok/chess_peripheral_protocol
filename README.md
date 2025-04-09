@@ -510,6 +510,7 @@ Central can request autocomplete if peripheral can do it by indicating `unsync_s
 c) begin rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR b
 p) unsync_setible rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
 c) set_state
+p) sync rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR b
 ```
 
 ### Option
