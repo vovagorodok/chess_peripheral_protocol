@@ -357,7 +357,10 @@ Can be used mostly for mechanical devices where `move` and `undo` take more time
 ```
 c) move a2a3
 p) moved
-c) undo a2a3
+p) move a7a6
+c) ok
+p) moved
+c) undo a7a6
 p) moved
 ```
 
