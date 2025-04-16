@@ -555,7 +555,7 @@ p) option option_name bool false
 ```
 Enum contains predefined values.
 ```
-p) option option_name enum value2 value1 value2 value3
+p) option option_name enum value_2 value_1 value_2 value_3
 ```
 Str contains any text information.
 ```
