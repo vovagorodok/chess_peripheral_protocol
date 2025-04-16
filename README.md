@@ -521,7 +521,7 @@ p) sync rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR b
 Feature `option` require commands:
 ```
 c) options_begin
-p) option <name> <type> <value> <type params>
+p) option <name> <type> <default value> <type params>
 p) options_end
 cp) options_reset
 cp) set_option <name> <value>
@@ -531,6 +531,7 @@ Central can read all options from peripheral.
 c) options_begin
 p) option brightness int 4 1 4 1
 p) option animation_speed int 2 1 8 1
+p) set_option brightness 2
 p) options_end
 ```
 
