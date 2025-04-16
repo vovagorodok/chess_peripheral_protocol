@@ -192,7 +192,6 @@ List of predefined end reasons:
 ```
 undefined
 checkmate
-stalemate
 draw
 timeout
 resign
@@ -399,6 +398,7 @@ c) end <reason>
 ```
 Draw reasons can be:
 - Draw Offer – Mutual Agreement, both players agree to a draw.
+- Stalemate – The player whose turn it is has no legal moves and is not in check.
 - Threefold Repetition – The same position occurs three times with the same possible moves (claimed by a player).
 - Fifty-Move Rule – If 50 moves pass without a pawn move or capture, a draw can be claimed.
 - Insufficient Material – Neither player has enough pieces to checkmate (e.g., king vs. king, king and knight vs. king).
@@ -412,6 +412,7 @@ c) end fifty_move
 List of predefined end reasons:
 ```
 draw_offer
+stalemate
 threefold_repetition
 fifty_move
 insufficient_material
