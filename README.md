@@ -523,7 +523,7 @@ Feature `option` require commands:
 c) options_begin
 p) option <name> <type> <value> <type params>
 p) options_end
-c) options_reset
+cp) options_reset
 cp) set_option <name> <value>
 ```
 Central can read all options from peripheral.
