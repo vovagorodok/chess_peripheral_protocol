@@ -455,9 +455,9 @@ Feature `score` require commands:
 ```
 c) score <white> <black>
 ```
-Central can indicate score after round ending in format `x.0` or `x.5` if draw.
+Central can indicate score after round ending usually in Elo format.
 ```
-c) score 1.5 2.5
+c) score 1700 1231
 ```
 
 ### Time
