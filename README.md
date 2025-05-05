@@ -14,6 +14,7 @@ String-based protocol that opens the possibility to connect and play chess from 
 - [Error](#error)
 - [Variant](#variant)
   - [Chess 960](#chess-960)
+  - [Crazy House](#crazy-house)
 - [Feature](#feature)
   - [Message](#message)
   - [Undo](#undo)
@@ -255,6 +256,14 @@ Known also as fischer random.
 Same as `standard`, but castling is indicated as king and rook starting positions.
 ```
 c) move e1h1
+```
+
+### Crazy House
+Variant name: `crazy_house`.  
+Known also as bughouse.  
+Same as `standard`, but with additional possibility to drop captured piece.
+```
+c) drop a4p
 ```
 
 ## Feature
