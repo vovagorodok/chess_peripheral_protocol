@@ -16,11 +16,12 @@ String-based protocol that opens the possibility to connect and play chess from 
   - [Chess 960](#chess-960)
 - [Feature](#feature)
   - [Message](#message)
-  - [Undo](#undo)
   - [Last Move](#last-move)
   - [Check](#check)
   - [Moved](#moved)
   - [Resign](#resign)
+  - [Undo](#undo)
+  - [Undo Offer](#undo-offer)
   - [Draw Offer](#draw-offer)
   - [Draw Reason](#draw-reason)
   - [Variant Reason](#variant-reason)
@@ -288,30 +289,6 @@ c) msg Hello peripheral
 p) msg Hello central
 ```
 
-### Undo
-Feature `undo` require commands:
-```
-cp) undo <uci>
-c) ok
-c) nok
-```
-Only central controls round and should accept or reject peripheral undo moves as for `move`.
-```
-p) undo a2a3
-c) ok
-p) undo a7a6
-c) nok
-c) undo a7a4
-```
-Castling, En passant and promotion are indicated as for `move` command.
-```
-c) undo a7a8q
-```
-```
-p) undo a7a8
-c) promote a7a8q
-```
-
 ### Last Move
 Feature `last_move` require commands:
 ```
@@ -371,6 +348,30 @@ p) resign
 Peripheral can indicate round resignation that can't be rejected.
 ```
 p) resign
+```
+
+### Undo
+Feature `undo` require commands:
+```
+c) undo <fen>
+```
+Only central controls round and send `undo`, peripheral responses by `sync` or `unsync`.
+```
+c) undo rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR w
+p) sync rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR w
+```
+
+### Undo Offer
+Feature `undo_offer` require commands:
+```
+cp) undo_offer
+cp) ok
+cp) nok
+```
+Should be enabled with `undo` feature. Opposite side can accept or reject.
+```
+c) undo_offer
+p) ok
 ```
 
 ### Draw Offer
