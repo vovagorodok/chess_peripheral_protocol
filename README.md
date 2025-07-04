@@ -545,7 +545,7 @@ p) set_option brightness 2
 p) options_end
 ```
 
-Central or peripheral can change option.
+Central or peripheral can change option. Recommended to not send this command more than once per 100 milliseconds for each option.
 ```
 c) set_option brightness 3
 ```
