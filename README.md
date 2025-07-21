@@ -517,12 +517,12 @@ Peripheral can send `state` for each change until `begin`.
 Feature `set_state` require commands:
 ```
 c) set_state
-p) unsync_setible <fen>
+p) unsync_settable <fen>
 ```
-Central can request autocomplete if peripheral can do it by indicating `unsync_setible` instead `unsync`.
+Central can request autocomplete if peripheral can do it by indicating `unsync_settable` instead `unsync`.
 ```
 c) begin rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR b
-p) unsync_setible rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
+p) unsync_settable rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
 c) set_state
 p) sync rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR b
 ```
