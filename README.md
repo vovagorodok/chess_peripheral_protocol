@@ -106,12 +106,12 @@ Peripheral send `unsync` if has different state.
 c) begin rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
 p) unsync rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR b
 ```
-Peripheral can send even `w` (white), `b` (black), `?` (unknown) instead of full piece information depending on internal sensors and knowledge.
+Peripheral can send even `u` (unknown piece) or `?` (unknown piece and color) instead of full piece information depending on internal sensors and knowledge.
 ```
 p) unsync ????????/????????/8/8/8/8/????????/????????
 ```
 ```
-p) unsync bbbbbbbb/bbbbbbbb/8/8/8/8/wwwwwwww/wwwwwwww w
+p) unsync uuuuuuuu/uuuuuuuu/8/8/8/8/UUUUUUUU/UUUUUUUU w
 ```
 
 ## Unsync
@@ -192,7 +192,7 @@ c) end checkmate
 
 List of predefined end reasons:
 ```
-undefined
+unknown
 checkmate
 draw
 timeout
@@ -434,7 +434,7 @@ Feature `variant_reason` require commands:
 ```
 c) end <reason>
 ```
-Central can send variant reason instead undefined.
+Central can send variant reason instead unknown.
 ```
 c) end king_of_the_hill
 ```
