@@ -192,7 +192,7 @@ c) end checkmate
 
 List of predefined end reasons:
 ```
-unknown
+undefined
 checkmate
 draw
 timeout
@@ -434,7 +434,7 @@ Feature `variant_reason` require commands:
 ```
 c) end <reason>
 ```
-Central can send variant reason instead unknown.
+Central can send variant reason instead undefined.
 ```
 c) end king_of_the_hill
 ```
