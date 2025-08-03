@@ -106,12 +106,12 @@ Peripheral send `unsync` if has different state.
 c) begin rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
 p) unsync rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR b
 ```
-Peripheral can send even `w` (white), `b` (black), `?` (unknown) instead of full piece information depending on internal sensors and knowledge.
+Peripheral can send even `u` (unknown black), `U` (unknown white) or `?` (unknown) instead of full piece information depending on internal sensors and knowledge.
 ```
 p) unsync ????????/????????/8/8/8/8/????????/????????
 ```
 ```
-p) unsync bbbbbbbb/bbbbbbbb/8/8/8/8/wwwwwwww/wwwwwwww w
+p) unsync uuuuuuuu/uuuuuuuu/8/8/8/8/UUUUUUUU/UUUUUUUU w
 ```
 
 ## Unsync
@@ -165,7 +165,7 @@ c) move a7a8q
 ```
 Central can send moves even when unsynchronized.
 ```
-p) unsync bbbbbbbb/bbbbbbbb/8/8/8/8/wwwwwwww/wwwwwwww w
+p) unsync rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
 c) move a7a8
 ```
 
