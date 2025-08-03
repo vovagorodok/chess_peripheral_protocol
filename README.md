@@ -165,7 +165,7 @@ c) move a7a8q
 ```
 Central can send moves even when unsynchronized.
 ```
-p) unsync bbbbbbbb/bbbbbbbb/8/8/8/8/wwwwwwww/wwwwwwww w
+p) unsync rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
 c) move a7a8
 ```
 
