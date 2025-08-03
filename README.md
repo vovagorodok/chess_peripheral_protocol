@@ -106,7 +106,7 @@ Peripheral send `unsync` if has different state.
 c) begin rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
 p) unsync rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR b
 ```
-Peripheral can send even `u` (unknown piece) or `?` (unknown piece and color) instead of full piece information depending on internal sensors and knowledge.
+Peripheral can send even `u` (unknown black), `U` (unknown white) or `?` (unknown) instead of full piece information depending on internal sensors and knowledge.
 ```
 p) unsync ????????/????????/8/8/8/8/????????/????????
 ```
