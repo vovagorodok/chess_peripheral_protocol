@@ -338,14 +338,12 @@ Feature `moved` require commands:
 ```
 p) moved
 ```
-Can be used mostly for mechanical devices where `move` and `undo` take more time.
+Can be used mostly for mechanical devices where `move` take more time.
 ```
 c) move a2a3
 p) moved
 p) move a7a6
 c) ok
-p) moved
-c) undo a7a6
 p) moved
 ```
 
