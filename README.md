@@ -337,7 +337,7 @@ Feature `moved` require commands:
 ```
 p) moved
 ```
-Can be used mostly for mechanical devices where `move` take more time.
+Peripheral can indicate that `move` or `shift_state` is physically done.
 ```
 c) move a2a3
 p) moved
