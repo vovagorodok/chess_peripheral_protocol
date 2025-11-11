@@ -384,6 +384,7 @@ If opposite side reject.
 p) undo_offer
 c) nok
 ```
+Opposite side may not respond.
 
 ### Draw Offer
 Feature `draw_offer` require commands:
@@ -403,6 +404,7 @@ If opposite side reject then round continues.
 p) draw_offer
 c) nok
 ```
+Opposite side may not respond.
 
 ### Draw Reason
 Feature `draw_reason` require commands:
