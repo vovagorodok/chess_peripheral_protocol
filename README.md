@@ -21,7 +21,7 @@ String-based protocol that opens the possibility to connect and play chess from 
   - [Check](#check)
   - [Moved](#moved)
   - [Resign](#resign)
-  - [Shift state](#shift-state)
+  - [Undo Redo](#undo-redo)
   - [Undo Offer](#undo-offer)
   - [Draw Offer](#draw-offer)
   - [Draw Reason](#draw-reason)
@@ -304,13 +304,13 @@ Feature `last_move` require commands:
 c) last_move <uci>
 ```
 When round doesn't have last move, then command shouldn't be sent.  
-Can be send only after: `begin`, `shift_state`.
+Can be send only after: `begin`, `undo`, `redo`.
 ```
 c) begin rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR w
 c) last_move a2a3
 ```
 ```
-p) shift_state rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR w
+p) undo rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR w
 c) last_move a2a3
 ```
 
@@ -320,7 +320,7 @@ Feature `check` require commands:
 c) check <king position>
 ```
 When round doesn't have check, then command shouldn't be sent.  
-Can be send only before `end` and after: `begin`, `last_move`, `move`, `shift_state`.
+Can be send only before `end` and after: `begin`, `last_move`, `move`, `undo`, `redo`.
 ```
 c) begin rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR w
 c) check a2
@@ -337,7 +337,7 @@ Feature `moved` require commands:
 ```
 p) moved
 ```
-Peripheral can indicate that `move` or `shift_state` is physically done.
+Peripheral can indicate that `move`, `undo` or `redo` is physically done.
 ```
 c) move a2a3
 p) moved
@@ -356,14 +356,18 @@ Peripheral can indicate round resignation that can't be rejected.
 p) resign
 ```
 
-### Shift state
-Feature `shift_state` require commands:
+### Undo Redo
+Feature `undo_redo` require commands:
 ```
-c) shift_state <fen>
+c) undo <fen>
+c) redo <fen>
 ```
-Only central controls round and send `shift_state` in order to undo or redo, peripheral can send `unsync` if shift is impossible.
+Only central controls round and send `undo` or `redo`, peripheral can send `unsync` if shift is impossible.
 ```
-c) shift_state rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR w
+c) undo rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR w
+```
+```
+c) redo rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR w
 ```
 
 ### Undo Offer
@@ -373,11 +377,11 @@ cp) undo_offer
 cp) ok
 cp) nok
 ```
-Should be enabled with `shift_state` feature. If opposite side accept then round state shifts.
+Should be enabled with `undo_redo` feature. If opposite side accept then central send `undo`.
 ```
 c) undo_offer
 p) ok
-c) shift_state rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR w
+c) undo rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR w
 ```
 If opposite side reject.
 ```
@@ -484,7 +488,7 @@ Central can indicate remaining time of each side in milliseconds.
 ```
 c) time 31444 12510
 ```
-Can be send only after: `begin`, `move`, `last_move`, `shift_state`.
+Can be send only after: `begin`, `move`, `last_move`, `undo`, `redo`.
 
 ### State Stream
 Feature `state_stream` require commands:
