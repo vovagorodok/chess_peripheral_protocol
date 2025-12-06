@@ -19,7 +19,6 @@ String-based protocol that opens the possibility to connect and play chess from 
   - [Message](#message)
   - [Last Move](#last-move)
   - [Check](#check)
-  - [Remove](#remove)
   - [Moved](#moved)
   - [Resign](#resign)
   - [Undo Redo](#undo-redo)
@@ -30,6 +29,7 @@ String-based protocol that opens the possibility to connect and play chess from 
   - [Side](#side)
   - [Score](#score)
   - [Time](#time)
+  - [Select](#select)
   - [State Stream](#state-stream)
   - [Get State](#get-state)
   - [Set State](#set-state)
@@ -333,17 +333,6 @@ c) check a2
 c) end checkmate
 ```
 
-### Remove
-Feature `remove` require commands:
-```
-cp) remove <position>
-```
-Central or peripheral indicate piece remove before move.
-```
-c) remove a2
-c) move a2a3
-```
-
 ### Moved
 Feature `moved` require commands:
 ```
@@ -501,6 +490,23 @@ Central can indicate remaining time of each side in milliseconds.
 c) time 31444 12510
 ```
 Can be send only after: `begin`, `move`, `last_move`, `undo`, `redo`.
+
+### Select
+Feature `select` require commands:
+```
+cp) select <position>
+cp) unselect
+```
+Central or peripheral indicate pieces remove before move.
+```
+c) select a2
+c) move a2a3
+```
+Position can be unselected.
+```
+p) select e3
+p) unselect
+```
 
 ### State Stream
 Feature `state_stream` require commands:
