@@ -497,7 +497,7 @@ Feature `select` require commands:
 cp) select <position>
 cp) unselect
 ```
-Central or peripheral indicate pieces remove before move.
+Central or peripheral indicate piece remove before move.
 ```
 c) select a2
 c) move a2a3
