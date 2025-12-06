@@ -19,6 +19,7 @@ String-based protocol that opens the possibility to connect and play chess from 
   - [Message](#message)
   - [Last Move](#last-move)
   - [Check](#check)
+  - [Remove](#remove)
   - [Moved](#moved)
   - [Resign](#resign)
   - [Undo Redo](#undo-redo)
@@ -330,6 +331,17 @@ p) move a7a6
 c) ok
 c) check a2
 c) end checkmate
+```
+
+### Remove
+Feature `remove` require commands:
+```
+cp) remove <position>
+```
+Central or peripheral indicate piece remove before move.
+```
+c) remove a2
+c) move a2a3
 ```
 
 ### Moved
