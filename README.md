@@ -29,9 +29,9 @@ String-based protocol that opens the possibility to connect and play chess from 
   - [Side](#side)
   - [Score](#score)
   - [Time](#time)
-  - [State Stream](#state-stream)
   - [Get State](#get-state)
   - [Set State](#set-state)
+  - [Submove State](#submove-state)
   - [Option](#option)
 - [Contributors](#contributors)
 - [Links](#links)
@@ -490,26 +490,6 @@ c) time 31444 12510
 ```
 Can be send only after: `begin`, `move`, `last_move`, `undo`, `redo`.
 
-### State Stream
-Feature `state_stream` require commands:
-```
-cp) state <fen>
-```
-Central or peripheral indicate `state` each time when state changes even in synchronized state.
-In order to indicate pieces removing and adding before move.
-```
-c) begin rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
-p) sync rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
-p) state rnbqkbnr/pppppppp/8/8/8/8/1PPPPPPP/RNBQKBNR
-p) state rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR
-p) move a2a3
-c) ok
-p) state rnbqkbnr/1ppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR
-p) state rnbqkbnr/1ppppppp/p7/8/8/P7/1PPPPPPP/RNBQKBNR
-c) move a7a6
-```
-Can be send only after: `begin`.
-
 ### Get State
 Feature `get_state` require commands:
 ```
@@ -537,6 +517,26 @@ p) unsync_settable rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
 c) set_state
 p) sync rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR b
 ```
+
+### Submove State
+Feature `submove_state` require commands:
+```
+cp) state <fen>
+```
+Central or peripheral indicate `state` each time when state changes even in synchronized state.
+In order to indicate pieces removing and adding before move.
+```
+c) begin rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
+p) sync rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
+p) state rnbqkbnr/pppppppp/8/8/8/8/1PPPPPPP/RNBQKBNR
+p) state rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR
+p) move a2a3
+c) ok
+p) state rnbqkbnr/1ppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR
+p) state rnbqkbnr/1ppppppp/p7/8/8/P7/1PPPPPPP/RNBQKBNR
+c) move a7a6
+```
+Can be send only after: `begin`.
 
 ### Option
 Feature `option` require commands:
