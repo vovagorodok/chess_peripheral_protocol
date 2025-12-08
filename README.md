@@ -495,7 +495,8 @@ Feature `state_stream` require commands:
 ```
 cp) state <fen>
 ```
-Central or peripheral indicate `state` each time when state changes even in synchronized state in order to indicate pieces removing and adding before move.
+Central or peripheral indicate `state` each time when state changes even in synchronized state.
+In order to indicate pieces removing and adding before move.
 ```
 c) begin rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
 p) sync rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
@@ -507,6 +508,7 @@ p) state rnbqkbnr/1ppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR
 p) state rnbqkbnr/1ppppppp/p7/8/8/P7/1PPPPPPP/RNBQKBNR
 c) move a7a6
 ```
+Can be send only after: `begin`.
 
 ### Get State
 Feature `get_state` require commands:
