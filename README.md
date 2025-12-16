@@ -277,7 +277,7 @@ c) begin 1m1m1m1m/m1m1m1m1/1m1m1m1m/8/8/M1M1M1M1/1M1M1M1M/M1M1M1M1 w
 ```
 Same `uci` motation.
 ```
-c) move b2b1d
+c) move b2a1d
 ```
 
 Draughts variants can be:
