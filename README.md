@@ -282,9 +282,9 @@ c) move b2b1d
 
 Draughts variants can be:
 - Standard – Also known as International. Board size 10×10, with flying king, backward beating and beating continuation instead promotion.
-- Russian – Also known as Shashki. Board size 8×8, with flying king, backward beating and beating continuation with promotion.
+- Russian – Also known as Shashki. Board size 8×8, with flying king, backward beating and beating continuation after promotion.
 - Brazilian – Also known as Warcaby. Board size 8×8, with same rules as Standard.
-- English – Also known as Checkers and American. Board size 8×8, without flying king, backward beating and beating continuation after promotion.
+- English – Also known as American Checkers. Board size 8×8, without flying king, backward beating and beating continuation after promotion.
 
 List of predefined variants names:
 ```
