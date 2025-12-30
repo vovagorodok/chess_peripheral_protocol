@@ -15,6 +15,7 @@ String-based protocol that opens the possibility to connect and play chess from 
 - [Variant](#variant)
   - [Chess 960](#chess-960)
   - [Crazy House](#crazy-house)
+  - [Draughts](#draughts)
 - [Feature](#feature)
   - [Message](#message)
   - [Last Move](#last-move)
@@ -106,13 +107,14 @@ Peripheral send `unsync` if has different state.
 c) begin rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w
 p) unsync rnbqkbnr/pppppppp/8/8/8/P7/1PPPPPPP/RNBQKBNR b
 ```
-Peripheral can send even `u` (unknown black), `U` (unknown white) or `?` (unknown) instead of full piece information depending on internal sensors and knowledge.
+Peripheral can send `u` (unknown black), `U` (unknown white) or `?` (unknown) instead of full piece information depending on internal sensors and knowledge.
 ```
 p) unsync ????????/????????/8/8/8/8/????????/????????
 ```
 ```
 p) unsync uuuuuuuu/uuuuuuuu/8/8/8/8/UUUUUUUU/UUUUUUUU w
 ```
+Peripheral can send `m` (black men), `M` (white men), `d` (black dame) or `D` (white dame) in case of draughts variants.
 
 ## Unsync
 Require commands:
@@ -266,6 +268,36 @@ Same as `standard`, but with additional possibility to drop captured piece.
 ```
 c) drop a4p
 ```
+
+### Draughts
+Same `fen` notation as `standard`, but with additional `m` (black men), `M` (white men), `d` (black dame) and `D` (white dame) symbols. King is named as dame in order to distinguish him from chess king.
+```
+c) set_variant draughts_brazilian
+c) begin 1m1m1m1m/m1m1m1m1/1m1m1m1m/8/8/M1M1M1M1/1M1M1M1M/M1M1M1M1 w
+```
+Same `uci` motation.
+```
+c) move b2a1d
+```
+
+Draughts variants can be:
+- Standard – Also known as International. Board size 10×10 with: flying king, men backward beating and beating continuation instead promotion.
+- Russian – Also known as Shashki. Board size 8×8 with: flying king, men backward beating and beating continuation after promotion.
+- Brazilian – Also known as Polish Warcaby. Board size 8×8 with same rules as Standard.
+- English – Also known as American Checkers. Board size 8×8 without: flying king, men backward beating and beating continuation after promotion.
+
+List of predefined variants names:
+```
+draughts_standard
+draughts_russian
+draughts_brazilian
+draughts_english
+draughts_breakthrough
+draughts_frisian
+draughts_frysk
+anti_draughts
+```
+All variants has first white move, even `draughts_english`.
 
 ## Feature
 Require commands:
