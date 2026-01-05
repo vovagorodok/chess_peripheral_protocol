@@ -275,7 +275,7 @@ Same `fen` notation as `standard`, but with additional `m` (black men), `M` (whi
 c) set_variant draughts_brazilian
 c) begin 1m1m1m1m/m1m1m1m1/1m1m1m1m/8/8/M1M1M1M1/1M1M1M1M/M1M1M1M1 w
 ```
-Same `uci` motation.
+Same `uci` notation.
 ```
 c) move b2a1d
 ```
