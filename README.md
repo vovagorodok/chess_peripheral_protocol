@@ -529,11 +529,12 @@ c) get_state
 p) state <fen>
 ```
 Central can check and begin round from peripheral state.
+It aborts running round.
 ```
 c) get_state
 p) state rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
 c) begin rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR
-```
+``` 
 Peripheral can send `state` for each change until `begin`.
 
 ### Set State
