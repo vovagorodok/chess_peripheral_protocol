@@ -626,16 +626,21 @@ p) option option_name float 0.2 -0.1 0.5
 
 Predefined option names that can be reused:
 ```
-brightness
 engine_level
-move_inactive_time
-move_speed
-animation_speed
-animation_type
-always_queen_promotion
+move_waiting_time
+motors_speed
+brightness
+theme
+animation_duration
+piece_animation
+round_animation
+board_animation
 enable_smooth_animation
+enable_change_animation
+always_queen_promotion
+volume
+enable_audio
 enable_docks
-enable_beeps
 enable_shakes
 ```
 
