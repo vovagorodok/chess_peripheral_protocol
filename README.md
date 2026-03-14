@@ -584,7 +584,7 @@ Central can read all options from peripheral.
 ```
 c) options_begin
 p) option brightness int 4 1 4 1
-p) option animation_speed int 2 1 8 1
+p) option animation_duration int 2 1 8 1
 p) set_option brightness 2
 p) options_end
 ```
