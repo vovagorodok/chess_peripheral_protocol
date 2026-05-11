@@ -647,10 +647,17 @@ enable_shakes
 ## Contributors
 
 ## Links
+Libraries:  
+https://github.com/vovagorodok/ArduinoBleChess  
+https://github.com/dkwach/chess_peripheral_driver  
+Examples:  
+https://github.com/vovagorodok/python-ble-chess-peripheral  
+https://github.com/TimoKropp/OPENCHESSBOARD_WiFi  
+Apps:  
+https://github.com/vovagorodok/blichess  
+https://github.com/vovagorodok/blidraughts  
 CECP:  
 http://hgm.nubati.net/CECP.html   
 https://www.gnu.org/software/xboard/engine-intf.html  
 UCI:  
-http://wbec-ridderkerk.nl/html/UCIProtocol.html  
-Libraries:  
-https://github.com/vovagorodok/ArduinoBleChess
+http://wbec-ridderkerk.nl/html/UCIProtocol.html
