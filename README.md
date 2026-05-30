@@ -40,7 +40,7 @@ String-based protocol that opens the possibility to connect and play chess from 
 ## Assumptions
 When central and peripheral has the same state (pieces positions) we call it synchronized.  
 Always central controls round rules and peripheral controls synchronization.  
-All commands and parameters should be written in lower case where words are splitted by the `_` sign.
+All commands and parameters should be written in lower case where words are separated by the `_` sign.
 
 Designation of device that sends command:  
 `c)` - central  
