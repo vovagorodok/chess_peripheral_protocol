@@ -176,7 +176,7 @@ Require commands:
 ```
 c) promote <uci>
 ```
-Central will promote instead peripheral by sending `promote` instead `ok` or `nok` if peripheral can't distinguish promotion.
+In case of promotion, if peripheral send legal `move` without promotion information, central will perform promotion and send `promote` instead `ok`.
 ```
 p) move a7a8
 c) promote a7a8n
